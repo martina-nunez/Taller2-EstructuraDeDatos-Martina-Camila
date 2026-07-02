@@ -40,3 +40,12 @@ int Cancion::getDuracion(){
 string Cancion::getUbicacion(){
     return ubicacion;
 }
+
+int Cancion::getReproducciones(){
+    return reproducciones;
+}
+
+void Cancion::setReproducciones(int cantidad){
+    this->reproducciones = cantidad;
+    cout << "reproducciones totales:" << reproducciones << endl;
+}

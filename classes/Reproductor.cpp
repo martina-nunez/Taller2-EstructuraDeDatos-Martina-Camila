@@ -121,3 +121,5 @@ void Reproductor::setAlbum(std::string album){
 void Reproductor::setAnio(int anio){
     this->anio = anio;
 }
+
+

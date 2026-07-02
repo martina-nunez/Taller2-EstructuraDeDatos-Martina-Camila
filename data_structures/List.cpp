@@ -112,8 +112,5 @@ void List::remove(int indice){
             next->setPrev(prev);
         }
     }
-
-    delete aux; 
-
-        
+    delete aux;   
 }

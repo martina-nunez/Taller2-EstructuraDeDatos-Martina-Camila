@@ -36,4 +36,6 @@ public:
     void limpiarConsola();
     void opcionF();
     void opcionT();
+    void mostrarCancionesMasEscuchadas();
+    void mostrarArtistasMasEscuchados();
 };

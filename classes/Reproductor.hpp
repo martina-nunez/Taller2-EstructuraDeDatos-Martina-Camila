@@ -16,11 +16,13 @@ private:
     
 
 public:
+    
     bool existeArchivo(std::string nombreArchivo);    
     void cargarDatos();
     void guardarDatos(std::string estado, std::string cancionActual, std::string artista, std::string repeticion, bool aleatorio);
     void crearDefault();
 
+    
     std::string getEstado();
     std::string getCancionActual();
     bool getAleatorio();
