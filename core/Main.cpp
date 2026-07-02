@@ -18,4 +18,4 @@ int main(){
     
     delete sistema;
     return 0;
-};
+}

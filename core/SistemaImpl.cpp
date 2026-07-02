@@ -11,10 +11,8 @@
 using namespace std;
 
 void SistemaImpl::cargarMusica(){
-    
     ifstream archivo("music_source.txt");//abrir el archivo donde estan las canciones
 
-    
     if(!archivo){//ver si el archivo existe
         cout<<"Error"<<endl;
         return;
@@ -25,17 +23,17 @@ void SistemaImpl::cargarMusica(){
         if(linea.empty()){
             continue;
         }
-        stringstream ss(linea);
+        stringstream sStream(linea);
         //declarar las variables que estan en las linea 
         string numUnico, nombre, artista, album, anioCancion, duracionSegundos, ubicacion;
 
-        getline(ss, numUnico, ',');
-        getline(ss, nombre, ',');
-        getline(ss, artista, ',');
-        getline(ss, album, ',');
-        getline(ss, anioCancion, ',');
-        getline(ss, duracionSegundos, ',');
-        getline(ss, ubicacion);
+        getline(sStream, numUnico, ',');
+        getline(sStream, nombre, ',');
+        getline(sStream, artista, ',');
+        getline(sStream, album, ',');
+        getline(sStream, anioCancion, ',');
+        getline(sStream, duracionSegundos, ',');
+        getline(sStream, ubicacion);
 
         int id = stoi(numUnico);
         int anio = stoi(anioCancion);
@@ -119,30 +117,24 @@ void SistemaImpl::mostrarMenu(){
             cout<<"L - Listado de canciones"<<endl;
             cout<<"X - Salir"<<endl;
             cout<<"Ingrese Opcion: ";
-        }
-        
-    }
-
-    
+        }   
+    }    
 }
 
 char SistemaImpl::obtenerOpcion(){
-    //pedir la opcion con la que hay que trabajar
-    char opcion;
+    char opcion;//pedir la opcion con la que hay que trabajar
     cin >> opcion;
     opcion = toupper(opcion);//hacer que todas las opciones que se ingresen esten en mayusculas
-    //control de error, para que solo se puedan ingresar las opciones validas
+   
     while(opcion != 'W' && opcion != 'Q' && opcion != 'E' && opcion != 'S' && opcion != 'R' && opcion != 'A' && opcion != 'L' && opcion != 'X'){
-        cout<<"Opcion no disponible, seleccione otra Opcion: ";
+        cout<<"Opcion no disponible, seleccione otra Opcion: ";//control de error, para que solo se puedan ingresar las opciones validas
         cin >> opcion;
         opcion = toupper(opcion);
     }
-
     return opcion;
 }
 
 void SistemaImpl::inicializar(){
-    
     cargarMusica();
     actual = lista.getStart();
     if(!r.existeArchivo("status.cfg")){
@@ -194,7 +186,7 @@ void SistemaImpl::trabajar(char opcion){
 void SistemaImpl::opcionW(){
     if(r.getEstado() == "En pausa" || r.getEstado() == "Reproduccion detenida"){
         r.setEstado("Reproduciendo");
-        if(actual != nullptr) {//siempre pasa, porque en inicializar se inciaia actual con el getStart()   
+        if(actual != nullptr) {//siempre pasa, porque en inicializar se incia actual con el getStart()   
             r.setCancionActual(actual->getValue()->getNombre());
             r.setArtista(actual->getValue()->getArtista());
             r.setAlbum(actual->getValue()->getAlbum());
@@ -267,11 +259,11 @@ void SistemaImpl::opcionE(){
 
     } else{
         if(actual != nullptr && actual->getNext() != nullptr){
-        actual = actual->getNext();
-        r.setCancionActual(actual->getValue()->getNombre());
-        r.setArtista(actual->getValue()->getArtista());
-        r.setAlbum(actual->getValue()->getAlbum());
-        r.setAnio(actual->getValue()->getAnio());
+            actual = actual->getNext();
+            r.setCancionActual(actual->getValue()->getNombre());
+            r.setArtista(actual->getValue()->getArtista());
+            r.setAlbum(actual->getValue()->getAlbum());
+            r.setAnio(actual->getValue()->getAnio());
         }else{
             listaVacia = true;
         }
@@ -295,7 +287,7 @@ void SistemaImpl::opcionR(){
         cout<< "0. Desactivar repeticion" << endl;
     }
     cin >> opcionRep;
-    while(opcionRep != 1 || opcionRep != 2 || opcionRep != 0){
+    while(opcionRep != 1 && opcionRep != 2 && opcionRep != 0){
         cout<<"Ingrese otra opcion: ";
         cin >> opcionRep;
     }
@@ -317,27 +309,39 @@ void SistemaImpl::opcionA(){
     cout << "\nActual (" << r.getRepeticion() << "): " << r.getCancionActual() << " - " << r.getArtista() << endl;
     cout << "\nLista de reproduccon actual:" << endl;
 
-    Node* aux = actual->getNext();//comenzar con la cancion que va despues de la actual
-    if(aux == nullptr){
-        cout << "Lista vacia" << endl;
-    } else{
-        for(int i = 1; aux != nullptr; i++){
-            cout << i << ". " << aux->getValue()->getNombre() << " - " << aux->getValue()->getArtista() << endl;
-            aux = aux->getNext();
+    if(actual->getNext() != nullptr){
+        Node* aux = actual->getNext();//comenzar con la cancion que va despues de la actual
+        if(aux == nullptr){
+            cout << "Lista vacia" << endl;
+        } else{
+            for(int i = 1; aux != nullptr; i++){
+                cout << i << ". " << aux->getValue()->getNombre() << " - " << aux->getValue()->getArtista() << endl;
+                aux = aux->getNext();
+            }
         }
     }
-
+    
     cout << "\nOpciones: " <<endl;
     cout << "S<num> - Saltar a la cancion seleccionada" << endl;
     cout << "V - Volver al menu principal" << endl;
     cout << "Ingrese una opcion: ";
     string opcion;
     cin >> opcion;
+
+    if(opcion[0] != 's' && opcion[0] != 'S' && opcion != "v" && opcion != "V"){
+        cout << "Opcion invalida" << endl;
+        return;
+    }
     
     if(opcion[0] == 's' || opcion[0] == 'S'){
-        int posicion = stoi(opcion.substr(1));//toma lo que viene despues de la s
-        seleccionarCancion(posicion, saltar);
-        return;
+        if(opcion.size() <= 1){
+            cout << "Opción inválida" << endl;
+            return;
+        } else{
+            int posicion = stoi(opcion.substr(1));//toma lo que viene despues de la s
+            seleccionarCancion(posicion, saltar);
+            return;    
+        }
         
     } else if(opcion == "v" || opcion == "V"){
         return;
@@ -395,11 +399,12 @@ void SistemaImpl::menuL(){
     cout << "Ingrese una opcion: ";
     string opcion;
     cin >> opcion;
-    while(opcion != "N" || opcion != "n" || opcion != "V" || opcion != "v"){
+    while(opcion[0] != 'R' && opcion[0] != 'r' && opcion[0] != 'A' && opcion[0] != 'a' && opcion != "N" && opcion != "n" && 
+            opcion[0] != 'D' && opcion[0] != 'd' && opcion != "V" && opcion != "v"){
         cout << "Ingrese otra opcion: ";
-        string opcion;
         cin >> opcion;
     }
+    
     if(opcion[0] == 'r' || opcion[0] == 'R'){//si la opcion es r
         int posicion = stoi(opcion.substr(1));//toma lo que viene despues de la s
         seleccionarCancion(posicion, saltar);
@@ -424,8 +429,6 @@ void SistemaImpl::menuL(){
         
             cout << "Cancion agregada con exito" <<endl;
         }
-
-
         return;
 
     }else if(opcion == "n" || opcion == "N"){
@@ -441,7 +444,7 @@ void SistemaImpl::menuL(){
         
         while(aux != nullptr && contador < posicion){
             aux = aux->getNext();
-            contador++;
+            contador++;            
         }
 
         if(aux != nullptr){
@@ -462,7 +465,10 @@ void SistemaImpl::seleccionarCancion(int indice, bool saltar){
     }else{
         Node* aux;
         if(saltar){
-            aux = actual->getNext(); 
+            if(actual->getNext() != nullptr){
+                aux = actual->getNext();
+            }
+            return;
         }else{
             aux = lista.getStart();
         }
@@ -492,16 +498,16 @@ void SistemaImpl::eliminarCancionArchivo(int id){
     ifstream lectura("music_source.txt");
     ofstream nuevo("nuevo.txt");
 
-    if(!lectura ||!nuevo){
+    if(!lectura || !nuevo){
         cout << "Error con los archivos" << endl;//control
         return;
     }
     
     string linea;
     while(getline(lectura, linea)){
-        stringstream ss(linea);
+        stringstream sStream(linea);
         string idLectura;
-        getline(ss, idLectura, ',');
+        getline(sStream, idLectura, ',');
 
         int idElim = stoi(idLectura);
 
@@ -513,8 +519,8 @@ void SistemaImpl::eliminarCancionArchivo(int id){
     lectura.close();
     nuevo.close();
 
-    remove("music_source.txt");
-    rename("nuevo.txt", "music_source.txt");
+    remove("music_source.txt");//eliminaa el archivo anterior
+    rename("nuevo.txt", "music_source.txt");//renombra el archivo nuevo como el anterior
 }
 
 void SistemaImpl::agregarCancionArchivo(){
@@ -549,7 +555,7 @@ void SistemaImpl::agregarCancionArchivo(){
         }
         aux = aux->getNext();
     }
-    int id = mayor +1;
+    int id = mayor + 1;
 
     ofstream archivo("music_source.txt", ios::app);
     archivo << id << "," << nombre << "," << artista << "," << album << "," << anio << "," << tiempo << "," << ruta << endl;
@@ -558,8 +564,6 @@ void SistemaImpl::agregarCancionArchivo(){
     lista.insertLast(cancion);
     
     archivo.close();
-    
-    
 }
 
 void SistemaImpl::limpiarConsola(){
