@@ -56,33 +56,35 @@ void SistemaImpl::mostrarMenu(){
     }else{
         if(aleatorio){
             if(estado == "Reproduciendo"){
-            cout<< estado << "(S - " << r.getRepeticion() << "):" << r.getCancionActual() <<endl;
-            cout<<"Artista: "<< r.getArtista() <<endl;
-            cout<<"Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" <<endl;    
+            cout << estado << "(S - " << r.getRepeticion() << "):" << r.getCancionActual() <<endl;
+            cout << "Artista: "<< r.getArtista() <<endl;
+            cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" <<endl;    
             }else {
-            cout<< estado <<endl;
+            cout << estado <<endl;
             }
         }else{
             if(estado == "Reproduciendo"){
-            cout<< estado << "(" << r.getRepeticion() << "):" << r.getCancionActual() <<endl;
-            cout<<"Artista: "<< r.getArtista() <<endl;
-            cout<<"Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" <<endl;    
+            cout << estado << "(" << r.getRepeticion() << "):" << r.getCancionActual() << endl;
+            cout << "Artista: "<< r.getArtista() << endl;
+            cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" << endl;    
             }else {
-            cout<< estado <<endl;
+            cout << estado << endl;
             }
         }
     }
 
     if(actual->getPrev() == nullptr){
         if(aleatorio){
-            cout<<"\nOpciones:"<<endl;
-            cout<<"W - Reproducir/Pausar"<<endl;
-            cout<<"E - Pista siguiente"<<endl;
-            cout<<"R - Repeticion (Desactivado/Repetir una/Repetir todas)"<<endl;
-            cout<<"A - Ver lista de reproduccion actual"<<endl;
-            cout<<"L - Listado de canciones"<<endl;
-            cout<<"X - Salir"<<endl;
-            cout<<"Ingrese Opcion: ";
+            cout << "\nOpciones:" << endl;
+            cout << "W - Reproducir/Pausar" << endl;
+            cout << "E - Pista siguiente" << endl;
+            cout << "R - Repeticion (Desactivado/Repetir una/Repetir todas)" << endl;
+            cout << "A - Ver lista de reproduccion actual" << endl;
+            cout << "L - Listado de canciones" << endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
+            cout << "X - Salir" << endl;
+            cout << "Ingrese Opcion: ";
         } else{
             cout<<"\nOpciones:"<<endl;
             cout<<"W - Reproducir/Pausar"<<endl;
@@ -91,6 +93,8 @@ void SistemaImpl::mostrarMenu(){
             cout<<"R - Repeticion (Desactivado/Repetir una/Repetir todas)"<<endl;
             cout<<"A - Ver lista de reproduccion actual"<<endl;
             cout<<"L - Listado de canciones"<<endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
             cout<<"X - Salir"<<endl;
             cout<<"Ingrese Opcion: ";
         }
@@ -104,6 +108,8 @@ void SistemaImpl::mostrarMenu(){
             cout<<"R - Repeticion (Desactivado/Repetir una/Repetir todas)"<<endl;
             cout<<"A - Ver lista de reproduccion actual"<<endl;
             cout<<"L - Listado de canciones"<<endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
             cout<<"X - Salir"<<endl;
             cout<<"Ingrese Opcion: ";
         } else{
@@ -115,6 +121,8 @@ void SistemaImpl::mostrarMenu(){
             cout<<"R - Repeticion (Desactivado/Repetir una/Repetir todas)"<<endl;
             cout<<"A - Ver lista de reproduccion actual"<<endl;
             cout<<"L - Listado de canciones"<<endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
             cout<<"X - Salir"<<endl;
             cout<<"Ingrese Opcion: ";
         }   
@@ -126,7 +134,7 @@ char SistemaImpl::obtenerOpcion(){
     cin >> opcion;
     opcion = toupper(opcion);//hacer que todas las opciones que se ingresen esten en mayusculas
    
-    while(opcion != 'W' && opcion != 'Q' && opcion != 'E' && opcion != 'S' && opcion != 'R' && opcion != 'A' && opcion != 'L' && opcion != 'X'){
+    while(opcion != 'W' && opcion != 'Q' && opcion != 'E' && opcion != 'S' && opcion != 'R' && opcion != 'A' && opcion != 'L' && opcion != 'F' && opcion != 'T' && opcion != 'X'){
         cout<<"Opcion no disponible, seleccione otra Opcion: ";//control de error, para que solo se puedan ingresar las opciones validas
         cin >> opcion;
         opcion = toupper(opcion);
@@ -179,6 +187,12 @@ void SistemaImpl::trabajar(char opcion){
             break;
         case 'X': //salir
             opcionX();
+            break;
+        case 'F':
+            opcionF();
+            break;
+        case 'T':
+            opcionT();
             break;
     }        
 }
@@ -568,4 +582,33 @@ void SistemaImpl::agregarCancionArchivo(){
 
 void SistemaImpl::limpiarConsola(){
     system("cls");
+}
+
+void SistemaImpl::opcionF(){
+    cout << "\nBusqueda de canciones" << endl;
+    cout << "\nBuscar canciones que contengan:";
+    string buscar;
+    cin.ignore();
+    getline(cin,buscar);
+
+    if(buscar == ""){
+        return;
+    }
+    //funcion de busqueda po rcoincidencias
+    
+    cout << "Busqueda de canciones" << endl;
+    cout << "\nBuscar canciones que contienen " << buscar << endl;
+    //opciones que contengan la palabra
+
+    cout << "\nOpciones:" << endl; 
+    cout << "R<num> - Reproducir canción seleccionada" << endl;
+    cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual" << endl; 
+    cout << "F - Repetir búsqueda con un texto diferente" << endl;
+    cout << "V - Volver al menú principal" << endl;
+    string opcion;
+    cin >> opcion;
+}
+
+void SistemaImpl::opcionT(){
+
 }

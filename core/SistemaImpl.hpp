@@ -34,4 +34,6 @@ public:
     void eliminarCancionArchivo(int posicion);
     void agregarCancionArchivo();
     void limpiarConsola();
+    void opcionF();
+    void opcionT();
 };
