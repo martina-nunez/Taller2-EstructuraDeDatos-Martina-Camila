@@ -7,6 +7,7 @@
 
 struct NodeTrie {
 private:
+
     NodeTrie* children[27];
     bool f;
     Cancion* cancion;

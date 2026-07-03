@@ -6,7 +6,6 @@ NodeTrie::NodeTrie() {
     for (int i = 0; i < 27; i++) {
         children[i] = nullptr;
     }
-
 }
 NodeTrie* NodeTrie::getChild(int i) {
     return children[i];
