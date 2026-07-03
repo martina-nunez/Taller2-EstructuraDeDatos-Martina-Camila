@@ -8,6 +8,7 @@
 class SistemaImpl : public Sistema {
 private:
     List lista;
+    List listaAux;
     Reproductor r;
     Node* actual;
     int totalCanciones;
@@ -31,6 +32,7 @@ public:
     void opcionA();
     void opcionL();
     void opcionX();
+    void guardarReproducciones();
     void mezclarCanciones(int total);
     void menuL();
     void seleccionarCancion(int indice, bool saltar);
@@ -39,7 +41,8 @@ public:
     void limpiarConsola();
     void opcionF();
     void opcionT();
-    void mostrarCancionesMasEscuchadas();
-    void mostrarArtistasMasEscuchados();
     void mostrarTop(std::string tipo);
+    void subOpcionC();
+    void subOpcionA();
+    void subOpcionS();
 };

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Cancion::Cancion(int id, std::string nombre, std::string artista, std::string album, int anio, int duracion, std::string ubicacion){
+Cancion::Cancion(int id, std::string nombre, std::string artista, std::string album, int anio, int duracion, std::string ubicacion, int reproducciones){
         this->id = id;
         this->nombre = nombre;
         this->artista = artista;
@@ -11,7 +11,7 @@ Cancion::Cancion(int id, std::string nombre, std::string artista, std::string al
         this->anio = anio;
         this->duracion = duracion;
         this->ubicacion = ubicacion;  
-        this->reproducciones = 0; 
+        this->reproducciones = reproducciones; 
 };
 
 int Cancion::getId(){
