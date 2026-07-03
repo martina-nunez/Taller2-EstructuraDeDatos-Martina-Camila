@@ -7,12 +7,28 @@ Heap::Heap(int cancionesTotales){
 }
 
 bool Heap::isEmpty(){
-    if(cantidad == 0) return false;
-    return true;
+    if(cantidad == 0) return true;
+    return false;
 }
 
 void Heap::insert(Cancion* cancion){
+    HeapNode node(cancion);
+    heap[cantidad] = node;
+    int hijo = cantidad;
+    cantidad++;
+    int padre = (hijo - 1)/2;
 
+    while(hijo > 0){
+        if(heap[hijo].getCancion()->getReproducciones() > heap[padre].getCancion()->getReproducciones()){
+            HeapNode aux = heap[padre];
+            heap[padre] = heap[hijo];
+            heap[hijo] = aux;    
+            hijo = padre;
+        }else{
+            break;
+        }
+        padre = (hijo - 1)/2;
+    }
 }
 
 HeapNode Heap::getMayor(){

@@ -639,7 +639,7 @@ void SistemaImpl::opcionT(){
     }
 
     if(opcion == 'C'){
-        mostrarCancionesMasEscuchadas();
+        mostrarTop("cancion");
         cout << "\nOpciones:" << endl;
         cout << "R<num> - Reproducir cancion seleccionada" << endl;
         cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual" << endl;
@@ -647,25 +647,80 @@ void SistemaImpl::opcionT(){
         cout << "V - Volver al menu principal" << endl;
         cout << "\nIngrese una opcion: ";
 
+        string opcion;
+        cin >> opcion;
+
+        if(opcion.size() > 1){
+           if(opcion[0] == 'R' || opcion[0] == 'r'){
+                //r.getCancionActual()
+           }else if(opcion[0] == 'A' || opcion[0] == 'a'){
+
+           }
+        }else{
+            if(opcion == "A"){
+                mostrarTop("artista");
+            }else if(opcion == "V"){
+                return;
+            }
+        }
+        
+
     } else if(opcion == 'A'){
-        mostrarArtistasMasEscuchados();
+        mostrarTop("artista");
         cout << "\nOpciones:" << endl;
         cout << "S<num> - Mostrar canciones del artista" << endl;
-        cout << "C - Top 10 canciones maas escuchadas" << endl;
+        cout << "C - Top 10 canciones mas escuchadas" << endl;
         cout << "V - Volver al menu principal" << endl;
         cout << "\nIngrese una opcion: ";
 
+        string opcion;
+        cin >> opcion;
+
+        if(opcion.size() > 1){
+           if(opcion[0] == 'S' || opcion[0] == 's'){
+                //r.getCancionActual()
+           }
+        }else{
+            if(opcion == "C"){
+                mostrarTop("cancion");
+            }else if(opcion == "V"){
+                return;
+            }
+        }
     }
 }
 
-void SistemaImpl::mostrarCancionesMasEscuchadas(){//arbol heap
-    limpiarConsola();
-    cout << "Ranking TOP 10 canciones mas escuchadas:\n" << endl;
-    //imprimir las canciones mas escuchadas
-}
 
-void SistemaImpl::mostrarArtistasMasEscuchados(){//arbol heap
+void SistemaImpl::mostrarTop(std::string tipo){
+    Heap heap(totalCanciones);
     limpiarConsola();
-    cout << "Ranking TOP 10 artustas mas escuchados:\n" << endl;
+    if(tipo == "artista"){
+        cout << "Ranking TOP 10 artistas mas escuchados:\n" << endl;    
+    }else if(tipo == "cancion"){
+        cout << "Ranking TOP 10 canciones mas escuchados:\n" << endl; 
+    }
+    
     //imprimir los artistas mas escuchados
+
+    Node* aux = lista.getStart();
+    while(aux != nullptr){
+        heap.insert(aux->getValue());
+        aux = aux->getNext();
+    }
+    
+    for(int i = 0 ; i < 10 ; i++){
+        if(!heap.isEmpty()){
+            HeapNode mayor = heap.getMayor();
+            int reproducciones = mayor.getCancion()->getReproducciones();
+            if(tipo == "artista"){
+                cout << i+1 << ". [" << reproducciones << "] " << mayor.getCancion()->getArtista() << endl;   
+            }else if(tipo == "cancion"){
+                cout << i+1 << ". [" << reproducciones << "] " << mayor.getCancion()->getNombre() << endl;
+            }
+            heap.removeMayor();
+        }else{
+            return;
+        }    
+            
+    }
 }

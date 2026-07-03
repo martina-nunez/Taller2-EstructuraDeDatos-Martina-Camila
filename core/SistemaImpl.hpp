@@ -2,7 +2,8 @@
 #include "Sistema.hpp"
 #include "../classes/Reproductor.hpp"
 #include "../data_structures/List.hpp"
-#include <string>
+#include <iostream>
+#include"../data_structures/Heap.hpp"
 
 class SistemaImpl : public Sistema {
 private:
@@ -13,6 +14,8 @@ private:
     bool aleatorio = false;
     bool repeticion = false;
     bool listaVacia = false;
+    
+
     
 public:
     void inicializar();      
@@ -38,4 +41,5 @@ public:
     void opcionT();
     void mostrarCancionesMasEscuchadas();
     void mostrarArtistasMasEscuchados();
+    void mostrarTop(std::string tipo);
 };

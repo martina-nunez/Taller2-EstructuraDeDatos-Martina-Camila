@@ -10,7 +10,7 @@ private:
     int anio;
     int duracion;
     std::string ubicacion;
-    int reproducciones = 0;    
+    int reproducciones;    
 
 public:
     

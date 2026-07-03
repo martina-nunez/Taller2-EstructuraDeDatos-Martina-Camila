@@ -10,7 +10,8 @@ Cancion::Cancion(int id, std::string nombre, std::string artista, std::string al
         this->album = album;
         this->anio = anio;
         this->duracion = duracion;
-        this->ubicacion = ubicacion;   
+        this->ubicacion = ubicacion;  
+        this->reproducciones = 0; 
 };
 
 int Cancion::getId(){
