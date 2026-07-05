@@ -9,10 +9,24 @@ Trie::Trie() {
 }
 
 int Trie::tenerI(char letra) {
+    letra = letra - 'a';
+    if (letra>='a' && letra<='z') {
+        return letra - 'a';
+    }
+    return -1;
 
 }
 
-void Trie::agregar() {
+void Trie::agregarc() {
+    NodeTrie* actual = root;
+    for (char l : letra) {
+        int ind = tenerI(l);
+        if (actual->getChildren(ind)== nullptr) {
+            actual->setChildren(ind, new NodeTrie());
+        }
+        actual = actual->getChildren(ind);
+    }
+
 
 }
 

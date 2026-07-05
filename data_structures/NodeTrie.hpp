@@ -4,18 +4,20 @@
 #define TALLER2_ESTRUCTURADEDATOS_MARTINA_CAMILA_NODETRIE_H
 #include "Cancion.hpp"
 #include "Node.hpp"
+#include "CancionTrie.hpp"
 
 struct NodeTrie {
 private:
 
     NodeTrie* children[27];
     bool f;
-    Cancion* cancion;
+    CancionTrie canciones;
 public:
     NodeTrie();
     NodeTrie* getChildren(int i);
     void setChildren(int i, NodeTrie* n);
-    Cancion* getCancion();
+    void agregarCancion(Cancion* c);
+    CancionTrie* getCancionTrie();
 
 };
 
