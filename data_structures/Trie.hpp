@@ -9,11 +9,11 @@ class Trie {
     private:
     NodeTrie *root;
     int tenerI(char letra);
+    void agregarC(string letra,Cancion* c);
 public:
     Trie();
-    void agregar();
-    Cancion* buscar();
-
+    void agregarc();
+    CancionTrie* buscar(string letra);
 };
 
 
