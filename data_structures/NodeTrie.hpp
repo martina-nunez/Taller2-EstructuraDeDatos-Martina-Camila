@@ -16,7 +16,8 @@ public:
     NodeTrie();
     NodeTrie* getChildren(int i);
     void setChildren(int i, NodeTrie* n);
-    void agregarCancion(Cancion* c);
+    bool fin();
+    void setFin(bool f);
     CancionTrie* getCancionTrie();
 
 };

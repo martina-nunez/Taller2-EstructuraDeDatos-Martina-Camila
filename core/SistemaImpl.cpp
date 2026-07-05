@@ -172,6 +172,10 @@ void SistemaImpl::inicializar(){
         aux = aux->getNext();
     }
     actual = listaAux.getStart();
+    while (aux != nullptr) {
+        trie.agregar(aux);
+        aux = aux->getNext();
+    }
 
     if(!r.existeArchivo("status.cfg")){
         r.crearDefault();
@@ -620,7 +624,6 @@ void SistemaImpl::limpiarConsola(){
 
 void SistemaImpl::opcionF(){
     cout << "\nBusqueda de canciones" << endl;
-    cout << "\nBuscar canciones que contengan:";
     string buscar;
     cin.ignore();
     getline(cin,buscar);
@@ -628,9 +631,14 @@ void SistemaImpl::opcionF(){
     if(buscar == ""){
         return;
     }
+
+    while (true) {
+        limpiarConsola();
+        cout <<"Canciones que contienen \""<<buscar<<"\"" << endl;
+        NodoCancion* nodo = ;
+
+    }
     //funcion de busqueda po rcoincidencias
-    cout << "Busqueda de canciones" << endl;
-    cout << "\nBuscar canciones que contienen " << buscar << endl;
     //opciones que contengan la palabra
     cout << "\nOpciones:" << endl; 
     cout << "R<num> - Reproducir canción seleccionada" << endl;
@@ -640,6 +648,7 @@ void SistemaImpl::opcionF(){
     cout << "\nIngrese una opcion: ";
     string opcion;
     cin >> opcion;
+
 }
 
 void SistemaImpl::opcionT(){

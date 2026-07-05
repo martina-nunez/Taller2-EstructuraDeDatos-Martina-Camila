@@ -4,7 +4,7 @@
 #include "../data_structures/List.hpp"
 #include <iostream>
 #include"../data_structures/Heap.hpp"
-
+#include "../data_structures/Trie.hpp"
 class SistemaImpl : public Sistema {
 private:
     List lista;
@@ -19,7 +19,10 @@ private:
     int cantArtistasTop = 0;
     Cancion* cancionesTop[10];
     int cantCancionesTop = 0;
-    
+
+    Trie trie;
+
+
 
     
 public:

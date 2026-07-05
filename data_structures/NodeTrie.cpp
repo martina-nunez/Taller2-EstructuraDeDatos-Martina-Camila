@@ -12,10 +12,14 @@ NodeTrie* NodeTrie::getChild(int i) {
 void NodeTrie::setChild(int i, NodeTrie* n) {
     children[i] = n;
 }
-
-void NodeTrie::agregarCancion(Cancion *c) {
-    canciones.agregar(c);
+CancionTrie* NodeTrie::getCancionTrie() {
+    return &canciones;
 }
-CancionTrie* NodeTrie::getCancion() {
-    return canciones;
+bool NodeTrie::fin() {
+    {
+        return f;
+    }
+}
+void NodeTrie::setFin(bool f) {
+    this->f = f;
 }

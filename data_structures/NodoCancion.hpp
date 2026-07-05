@@ -6,10 +6,16 @@
 
 
 class NodoCancion {
+    private:
+    Node* nodo;
+    NodoCancion* siguiente;
     public:
-    Cancion* cancion;
-    NodoCancion* sigui;
-    NodoCancion(Cancion* c);
+
+    NodoCancion(Node* nodo);
+    Node* getNodo();
+    void setNodo(Node* nodo);
+    NodoCancion* getSiguiente();
+    void setSiguiente(NodoCancion* siguiente);
 
 };
 

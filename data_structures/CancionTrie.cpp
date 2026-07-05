@@ -3,20 +3,53 @@
 //
 
 #include "CancionTrie.hpp"
-ListaCancionTrie::CancionTrie() {
+CancionTrie::CancionTrie() {
     h = nullptr;
+    cola = nullptr;
+    cant = 0;
 }
-void ListaCancionTrie::agregar(Cancion* c) {
-    if (h == nullptr) {
-        h = new NodoCancion(c);
+bool CancionTrie::esVacia() {
+    return h == nullptr;
+}
+
+int CancionTrie::tamano() {
+    return cant;
+}
+NodoCancion* CancionTrie::geth() {
+    return h;
+}
+
+void CancionTrie::agregar(Node *nodo) {
+    if (nodo == nullptr) {
+        return;
     }
     NodoCancion* aux = h;
-    while (aux->sigui != nullptr) {
-        aux = aux->sigui;
+    while (aux != nullptr) {
+        if (aux->getNodo() == nodo) {
+            return;
+        }
+        aux = aux->getsiguiente();
     }
-    aux->sigui = h;
-
+    NodoCancion* aux2 = new NodoCancion(nodo);
+    if (h == nullptr) {
+        h = aux2;
+        cola = aux2;
+    } else {
+        cola->setSiguiente(aux2);
+        cola = aux2;
+    }
+    cant++;
 }
-NodoCancion* ListaCancionTrie::geth() {
-    return h;
+
+void CancionTrie::limpiar() {
+    NodoCancion* aux = h;
+    while (aux != nullptr) {
+        nodoCancion* aux2 = aux->getsiguiente();
+        delete aux;
+        aux = aux2;
+    }
+    h = nullptr;
+    cola = nullptr;
+    cant = 0;
+
 }
