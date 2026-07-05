@@ -14,7 +14,11 @@ private:
     int totalCanciones;
     bool aleatorio = false;
     bool repeticion = false;
-    bool listaVacia = false;
+
+    std::string artistasTop[10];
+    int cantArtistasTop = 0;
+    Cancion* cancionesTop[10];
+    int cantCancionesTop = 0;
     
 
     
@@ -41,8 +45,9 @@ public:
     void limpiarConsola();
     void opcionF();
     void opcionT();
-    void mostrarTop(std::string tipo);
+    void topCanciones();
+    void topArtistas();
     void subOpcionC();
     void subOpcionA();
-    void subOpcionS();
+    void subOpcionS(int numero);
 };

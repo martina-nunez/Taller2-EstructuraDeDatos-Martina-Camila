@@ -12,5 +12,6 @@ class Heap{
         void insert(Cancion* cancion);
         HeapNode getMayor();
         void removeMayor();
+        bool isMayor(Cancion* cancion1, Cancion* cancion2);
         ~Heap();
 };

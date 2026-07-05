@@ -19,7 +19,7 @@ void Heap::insert(Cancion* cancion){
     int padre = (hijo - 1)/2;
 
     while(hijo > 0){
-        if(heap[hijo].getCancion()->getReproducciones() > heap[padre].getCancion()->getReproducciones()){
+        if(isMayor(heap[hijo].getCancion(), heap[padre].getCancion())){
             HeapNode aux = heap[padre];
             heap[padre] = heap[hijo];
             heap[hijo] = aux;    
@@ -48,10 +48,10 @@ void Heap::removeMayor(){
         hijoDer = 2 * padre + 2;
         int mayor = padre;
         
-        if(hijoIzq < cantidad && heap[hijoIzq].getCancion()->getReproducciones() > heap[mayor].getCancion()->getReproducciones()){
+        if(hijoIzq < cantidad && isMayor(heap[hijoIzq].getCancion(), heap[mayor].getCancion())){
                 mayor = hijoIzq;
         } 
-        if(hijoDer < cantidad && heap[hijoDer].getCancion()->getReproducciones() > heap[mayor].getCancion()->getReproducciones()){
+        if(hijoDer < cantidad && isMayor(heap[hijoDer].getCancion(), heap[mayor].getCancion())){
                 mayor = hijoDer;
         }
            
@@ -63,6 +63,22 @@ void Heap::removeMayor(){
 
         padre = mayor;
     }
+}
+
+bool Heap::isMayor(Cancion* cancion1, Cancion* cancion2){
+    if(cancion1->getReproducciones() > cancion2->getReproducciones()){
+        return true;
+    }else if(cancion1->getReproducciones() < cancion2->getReproducciones()){
+        return false;
+    }else if(cancion1->getNombre() < cancion2->getNombre()){
+        return true;
+    }else if(cancion1->getNombre() > cancion2->getNombre()){
+        return false;
+    }else if(cancion1->getArtista() < cancion2->getArtista()){
+        return true;
+    }
+    return false;
+
 }
 
 Heap::~Heap(){

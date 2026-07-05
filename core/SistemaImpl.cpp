@@ -51,27 +51,23 @@ void SistemaImpl::cargarMusica(){
 
 void SistemaImpl::mostrarMenu(){
     limpiarConsola();
-
     string estado = r.getEstado();
-    if(listaVacia){
-        cout << "Lista vacia" << endl;
+
+    if(aleatorio){
+        if(estado == "Reproduciendo"){
+        cout << estado << "(S - " << r.getRepeticion() << "):" << r.getCancionActual() <<endl;
+        cout << "Artista: "<< r.getArtista() <<endl;
+        cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" <<endl;    
+        }else {
+        cout << estado <<endl;
+        }
     }else{
-        if(aleatorio){
-            if(estado == "Reproduciendo"){
-            cout << estado << "(S - " << r.getRepeticion() << "):" << r.getCancionActual() <<endl;
-            cout << "Artista: "<< r.getArtista() <<endl;
-            cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" <<endl;    
-            }else {
-            cout << estado <<endl;
-            }
-        }else{
-            if(estado == "Reproduciendo"){
-            cout << estado << "(" << r.getRepeticion() << "):" << r.getCancionActual() << endl;
-            cout << "Artista: "<< r.getArtista() << endl;
-            cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" << endl;    
-            }else {
-            cout << estado << endl;
-            }
+        if(estado == "Reproduciendo"){
+        cout << estado << "(" << r.getRepeticion() << "):" << r.getCancionActual() << endl;
+        cout << "Artista: "<< r.getArtista() << endl;
+        cout << "Album: "<< r.getAlbum() << "[" << r.getAnio() << "]" << endl;    
+        }else {
+        cout << estado << endl;
         }
     }
 
@@ -99,9 +95,33 @@ void SistemaImpl::mostrarMenu(){
             cout << "T - Top 10 Artistas y Canciones" << endl;
             cout<<"X - Salir"<<endl;
             cout<<"Ingrese Opcion: ";
+        }  
+    } else if(actual->getNext() == nullptr){
+        if(aleatorio){
+            cout << "\nOpciones:" << endl;
+            cout << "W - Reproducir/Pausar" << endl;
+            cout << "Q - Pista anterior" << endl;
+            cout << "R - Repeticion (Desactivado/Repetir una/Repetir todas)" << endl;
+            cout << "A - Ver lista de reproduccion actual" << endl;
+            cout << "L - Listado de canciones" << endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
+            cout << "X - Salir" << endl;
+            cout << "Ingrese Opcion: ";
+        } else{
+            cout<<"\nOpciones:"<<endl;
+            cout<<"W - Reproducir/Pausar"<<endl;
+            cout<<"Q - Pista anterior"<<endl;
+            cout<<"S - Activar/Desactivar modo aleatorio"<<endl;
+            cout<<"R - Repeticion (Desactivado/Repetir una/Repetir todas)"<<endl;
+            cout<<"A - Ver lista de reproduccion actual"<<endl;
+            cout<<"L - Listado de canciones"<<endl;
+            cout << "F - Buscar canciones" << endl;
+            cout << "T - Top 10 Artistas y Canciones" << endl;
+            cout<<"X - Salir"<<endl;
+            cout<<"Ingrese Opcion: ";
         }
-        
-    } else{
+    }else{
         if(aleatorio){
             cout<<"\nOpciones:"<<endl;
             cout<<"W - Reproducir/Pausar"<<endl;
@@ -126,9 +146,9 @@ void SistemaImpl::mostrarMenu(){
             cout << "F - Buscar canciones" << endl;
             cout << "T - Top 10 Artistas y Canciones" << endl;
             cout<<"X - Salir"<<endl;
-            cout<<"Ingrese Opcion: ";
-        }   
-    }    
+            cout<<"Ingrese Opcion: ";     
+        }    
+    }
 }
 
 char SistemaImpl::obtenerOpcion(){
@@ -146,10 +166,16 @@ char SistemaImpl::obtenerOpcion(){
 
 void SistemaImpl::inicializar(){
     cargarMusica();
-    actual = lista.getStart();
+    Node* aux = lista.getStart();
+    while(aux != nullptr){
+        listaAux.insertLast(aux->getValue());
+        aux = aux->getNext();
+    }
+    actual = listaAux.getStart();
+
     if(!r.existeArchivo("status.cfg")){
         r.crearDefault();
-    } else {
+    }else {
         r.cargarDatos();
         Node* aux= lista.getStart();
         while(aux != nullptr){
@@ -169,7 +195,6 @@ void SistemaImpl::trabajar(char opcion){
             opcionW();
             break;
         case 'Q': // cancion anterior
-            listaVacia = false;
             opcionQ();
             break;
         case 'E': //cancion siguiente
@@ -216,7 +241,7 @@ void SistemaImpl::opcionW(){
 }
 
 void SistemaImpl::opcionQ(){
-    if(lista.isEmpty()){
+    if(lista.isEmpty() || actual == nullptr){
         return;
     }
     if(r.getEstado() == "Reproduciendo"){
@@ -227,7 +252,6 @@ void SistemaImpl::opcionQ(){
                 r.setAlbum(actual->getValue()->getAlbum());
                 r.setAnio(actual->getValue()->getAnio());
             }
-
         }else if(r.getRepeticion() == "RA"){ //cuando se repiten todas
             if(actual != nullptr && actual->getPrev() != nullptr){
                 actual = actual->getPrev();
@@ -238,7 +262,7 @@ void SistemaImpl::opcionQ(){
                     actual = lista.getStart();
                 }
             }
-        } else{
+        }else{
             if(actual != nullptr && actual->getPrev() != nullptr){
             actual = actual->getPrev();
 
@@ -254,7 +278,7 @@ void SistemaImpl::opcionQ(){
 }
 
 void SistemaImpl::opcionE(){
-    if(lista.isEmpty()){
+    if(lista.isEmpty() || actual == nullptr){
         return;
     }
     if(r.getEstado() == "Reproduciendo"){
@@ -265,18 +289,12 @@ void SistemaImpl::opcionE(){
                 r.setAlbum(actual->getValue()->getAlbum());
                 r.setAnio(actual->getValue()->getAnio());
             }
-
         }else if(r.getRepeticion() == "RA"){ //cuando se repiten todas
             if(actual != nullptr && actual->getNext() != nullptr){
                 actual = actual->getNext();
             }else{
-                actual = lista.getStart();
-                if(aleatorio){
-                    mezclarCanciones(totalCanciones);
-                    actual = lista.getStart();
-                }
+                return;
             }
-
         }else{
             if(actual != nullptr && actual->getNext() != nullptr){
                 actual = actual->getNext();
@@ -285,7 +303,7 @@ void SistemaImpl::opcionE(){
                 r.setAlbum(actual->getValue()->getAlbum());
                 r.setAnio(actual->getValue()->getAnio());
             }else{
-                listaVacia = true;
+                return;
             }
         }
         int reproducciones = actual->getValue()->getReproducciones();
@@ -293,7 +311,6 @@ void SistemaImpl::opcionE(){
     }  
 }
     
-
 void SistemaImpl::opcionS(){
     if(aleatorio == false){
         aleatorio = true;
@@ -366,7 +383,6 @@ void SistemaImpl::opcionA(){
             seleccionarCancion(posicion, saltar);
             return;    
         }
-        
     } else if(opcion == "v" || opcion == "V"){
         return;
     }
@@ -385,7 +401,6 @@ void SistemaImpl::opcionX(){
     string artista = r.getArtista();
     bool aleatorio = r.getAleatorio();
     string repeticion = r.getRepeticion();
-    
 
     guardarReproducciones();
     r.guardarDatos(estado, cancion, artista, repeticion, aleatorio);
@@ -422,7 +437,6 @@ void SistemaImpl::mezclarCanciones(int total){
         node1->setValue(node2->getValue());
         node2->setValue(aux);
     }
-    
 }
 
 void SistemaImpl::menuL(){
@@ -433,7 +447,6 @@ void SistemaImpl::menuL(){
     cout << "N - Agregar cancion al registro de canciones" << endl;
     cout << "D<num> - Eliminar cancion seleccionada" << endl;
     cout << "V - volver al menu principal" << endl;
-
     cout << "Ingrese una opcion: ";
     string opcion;
     cin >> opcion;
@@ -447,55 +460,48 @@ void SistemaImpl::menuL(){
         int posicion = stoi(opcion.substr(1));//toma lo que viene despues de la s
         seleccionarCancion(posicion, saltar);
         return;
-
     }else if(opcion[0] == 'a' || opcion[0] == 'A'){//si la opcion es a
-        int posicion = stoi(opcion.substr(1));
-
+        int id = stoi(opcion.substr(1));
         Node* aux = lista.getStart();
-        int contador = 1;
         
-        while(aux != nullptr && contador < posicion){
-            aux = aux->getNext();
-            contador++;
+        while(aux != nullptr){
+            if(aux->getValue()->getId() == id){
+                break;
+            }
+            aux = aux->getNext(); 
         }
 
         if(aux != nullptr){
             Cancion* original = aux->getValue();
-            Cancion* copia = new Cancion(original->getId(), original->getNombre(), original->getArtista(), original->getAlbum(), original->getAnio(), original->getDuracion(), original->getUbicacion(), original->getReproducciones());
-            lista.remove(posicion);
-            lista.insertLast(copia);   
-        
+            listaAux.insertLast(original);  
             cout << "Cancion agregada con exito" <<endl;
         }
         return;
-
     }else if(opcion == "n" || opcion == "N"){
         agregarCancionArchivo();
         return;
-
     }else if(opcion[0] == 'd' || opcion[0] == 'D'){
         if(opcion.size() <= 1){
             cout << "Opción inválida" << endl;
             return;
         }
-        int posicion = stoi(opcion.substr(1));
+        int id = stoi(opcion.substr(1));
         
         Node* aux = lista.getStart();
-            int contador = 1;
-            int id;
         
-        while(aux != nullptr && contador < posicion){
-            aux = aux->getNext();
-            contador++;            
+        while(aux != nullptr){
+            if(aux->getValue()->getId() == id){
+                break;
+            }
+            aux = aux->getNext();             
         }
 
         if(aux != nullptr){
             id = aux->getValue()->getId();
         }
-        lista.remove(posicion);
+        lista.remove(id);
         eliminarCancionArchivo(id);
         return;
-
     }else if(opcion == "v" || opcion == "V"){
         return;
     }
@@ -512,13 +518,14 @@ void SistemaImpl::seleccionarCancion(int indice, bool saltar){
             }
             return;
         }else{
-            aux = lista.getStart();
+            aux = listaAux.getStart();
         }
         
-        int contador = 1;
-        while(aux != nullptr && contador < indice){
-            aux = aux->getNext();
-            contador++;
+        while(aux != nullptr){
+            if(aux->getValue()->getId() == indice){
+                break;
+            }
+            aux = aux->getNext(); 
         }
 
         if(aux != nullptr){
@@ -529,8 +536,6 @@ void SistemaImpl::seleccionarCancion(int indice, bool saltar){
             r.setArtista(actual->getValue()->getArtista());
             r.setAlbum(actual->getValue()->getAlbum());
             r.setAnio(actual->getValue()->getAnio());
-            
-        
         }else{
             cout << "Posicion invalida" << endl;
         }
@@ -624,11 +629,9 @@ void SistemaImpl::opcionF(){
         return;
     }
     //funcion de busqueda po rcoincidencias
-
     cout << "Busqueda de canciones" << endl;
     cout << "\nBuscar canciones que contienen " << buscar << endl;
     //opciones que contengan la palabra
-
     cout << "\nOpciones:" << endl; 
     cout << "R<num> - Reproducir canción seleccionada" << endl;
     cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual" << endl; 
@@ -664,46 +667,84 @@ void SistemaImpl::opcionT(){
     }     
 }
 
-
-void SistemaImpl::mostrarTop(std::string tipo){
+void SistemaImpl::topArtistas(){
     Heap heap(totalCanciones);
     limpiarConsola();
-    if(tipo == "artista"){
-        cout << "Ranking TOP 10 artistas mas escuchados:\n" << endl;    
-    }else if(tipo == "cancion"){
-        cout << "Ranking TOP 10 canciones mas escuchados:\n" << endl; 
-    }
-    
-    //imprimir los artistas mas escuchados
+    cout << "Ranking TOP 10 artistas mas escuchados:\n" << endl;
+    std::string artistasMostrados[50];
+    int cantMostrados = 0;
+    int posicion = 1;
+    cantArtistasTop = 0;
+    while(cantMostrados < 10){
+        
+        std::string masEscuchado = "";
+        int mayReproducciones = 0;
+        Node* aux = lista.getStart();
+        while(aux != nullptr){
+            std::string artista = aux->getValue()->getArtista();
+            bool mostrado = false;
 
+            for(int i = 0 ; i < cantMostrados ; i++){
+                if(artistasMostrados[i] == artista){
+                    mostrado = true;
+                    break;
+                }
+            }
+            if(!mostrado){
+                int total = 0;
+                Node* aux2 = lista.getStart();
+                while(aux2 != nullptr){
+                    if(aux2->getValue()->getArtista() == artista){
+                        total += aux2->getValue()->getReproducciones();
+                    }
+                    aux2 = aux2->getNext();
+                }
+                if(total > mayReproducciones){
+                    mayReproducciones = total;
+                    masEscuchado = artista;
+                }else if(total == mayReproducciones && artista < masEscuchado){
+                    masEscuchado = artista;
+                }
+            }
+            aux = aux->getNext();
+        }
+        if(masEscuchado == ""){
+            break;
+        }
+        cout << posicion << ". [" << mayReproducciones << "] " << masEscuchado << endl;
+        artistasMostrados[cantMostrados] = masEscuchado;
+        cantMostrados++;
+        posicion++;
+        artistasTop[cantArtistasTop] = masEscuchado;
+        //if(cantMostrados == 10) break;
+        cantArtistasTop++;
+    }
+}
+
+void SistemaImpl::topCanciones(){
+    Heap heap(totalCanciones);
+    limpiarConsola();
+    cout << "Ranking TOP 10 canciones mas escuchados:\n" << endl;
     Node* aux = lista.getStart();
     while(aux != nullptr){
         heap.insert(aux->getValue());
         aux = aux->getNext();
     }
     int i = 0;
-    while(aux != nullptr){
-        if(!heap.isEmpty()){
-            HeapNode mayor = heap.getMayor();
-            int reproducciones = mayor.getCancion()->getReproducciones();
-            if(tipo == "artista"){
-                cout << i+1 << ". [" << reproducciones << "] " << mayor.getCancion()->getArtista() << endl;   
-            }else if(tipo == "cancion"){
-                cout << i+1 << ". [" << reproducciones << "] " << mayor.getCancion()->getNombre() << endl;
-            }
-            heap.removeMayor();
-        }else{
-            return;
-        } 
+    while(!heap.isEmpty() && i < 10){
+        HeapNode mayor = heap.getMayor();
+        cancionesTop[i] = mayor.getCancion();
+        int reproducciones = mayor.getCancion()->getReproducciones();
+        
+        cout << i+1 << ". [" << reproducciones << "] " << mayor.getCancion()->getNombre() << " - " << mayor.getCancion()->getArtista() << endl;
+        
+        heap.removeMayor();
         i++;
-        if(i>9){
-            break;
-        }
     }
 }
 
 void SistemaImpl::subOpcionC(){
-    mostrarTop("cancion");
+    topCanciones();
     cout << "\nOpciones:" << endl;
     cout << "R<num> - Reproducir cancion seleccionada" << endl;
     cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual" << endl;
@@ -711,132 +752,208 @@ void SistemaImpl::subOpcionC(){
     cout << "V - Volver al menu principal" << endl;
     cout << "\nIngrese una opcion: ";
 
-    cin.ignore();
     string opcion;
     cin >> opcion;
 
     if(opcion.size() > 1){
         if(opcion[0] == 'R' || opcion[0] == 'r'){
             bool saltar = false;
-            int posicion = stoi(opcion.substr(1));//toma lo que viene despues de la s
-            seleccionarCancion(posicion, saltar);
+            int posicion = stoi(opcion.substr(1));
+            Cancion* elegido = cancionesTop[posicion -1];
+            seleccionarCancion(elegido->getId(), saltar);
+
             listaAux.clear();
             listaAux.insertLast(actual->getValue());
             
-            int cancionesAgregadas;
+            int cancionesAgregadas = 1;
             while(cancionesAgregadas < totalCanciones){
                 int numero = rand() %  totalCanciones +1;
                 Node* aux = lista.getStart();
-                int contador = 1;
-                while(aux != nullptr && contador < numero){
-                    aux = aux->getNext();
-                    contador++;
-                }
-                if(aux != nullptr){
-                    Cancion* cancion = aux->getValue();
-
-                    if(cancion != actual->getValue()){
-                        listaAux.insertLast(cancion);
-                        cancionesAgregadas++;
+                
+                while(aux != nullptr){
+                    if(aux->getValue()->getId() == numero){
+                        bool existe = false;
+                        Node* check = listaAux.getStart();
+                        while(check != nullptr){
+                            if(check->getValue() == aux->getValue()){
+                                existe = true;
+                                break;
+                            }
+                            check = check->getNext();
+                        }
+                        if(!existe){
+                            listaAux.insertLast(aux->getValue());
+                            cancionesAgregadas++;
+                        }
+                        break;
                     }
+                    aux = aux->getNext();
                 }
             }
-            
-            
-
-
-            }
-            return;    
-
-    }else if(opcion[0] == 'A' || opcion[0] == 'a'){
-        int posicion = stoi(opcion.substr(1));
-
-        Node* aux = lista.getStart();
-        int contador = 1;
-        
-        while(aux != nullptr && contador < posicion){
-            aux = aux->getNext();
-            contador++;
-        }
-
-        if(aux != nullptr){
-            Cancion* original = aux->getValue();
-            Cancion* copia = new Cancion(original->getId(), original->getNombre(), original->getArtista(), original->getAlbum(), original->getAnio(), original->getDuracion(), original->getUbicacion(), original->getReproducciones());
-            lista.remove(posicion);
-            lista.insertLast(copia);   
-            
+            actual = listaAux.getStart();
+        }else if(opcion[0] == 'A' || opcion[0] == 'a'){
+            int posicion = stoi(opcion.substr(1));
+            Cancion* elegida = cancionesTop[posicion - 1];
+            listaAux.insertLast(elegida);  
             cout << "Cancion agregada con exito" <<endl;
+            return;
         }
-        return;
     }else{
-        if(opcion == "A"){
+        if(opcion == "A" || opcion == "a"){
             subOpcionA();
-        }else if(opcion == "V"){
+            return;
+        }else if(opcion == "V" || opcion == "v"){
             return;
         }
     }
 }
 
-
-
 void SistemaImpl::subOpcionA(){
-    mostrarTop("artista");
+    topArtistas();
     cout << "\nOpciones:" << endl;
     cout << "S<num> - Mostrar canciones del artista" << endl;
     cout << "C - Top 10 canciones mas escuchadas" << endl;
     cout << "V - Volver al menu principal" << endl;
     cout << "\nIngrese una opcion: ";
 
-    cin.ignore();
     string opcion;
     cin >> opcion;
 
     if(opcion.size() > 1){
         if(opcion[0] == 'S' || opcion[0] == 's'){
-                subOpcionS();
+                int num = stoi(opcion.substr(1)); 
+                if(num >= 1 && num <=cantArtistasTop){
+                    subOpcionS(num);
+                }
        }
     }else{
-        if(opcion == "C"){
+        if(opcion == "C" || opcion == "c"){
             subOpcionC();
-        }else if(opcion == "V"){
+            return;
+        }else if(opcion == "V" || opcion == "v"){
             return;
         }
     }
-    
 }
 
-void SistemaImpl::subOpcionS(){
+void SistemaImpl::subOpcionS(int numero){
+    limpiarConsola();
     cout << "Ranking TOP 10 Artistas mas escuchados:" << endl; 
-    cout << "Artista: " << 'artista' << endl;
-
+    //cout << "Artista: " << "artista" << endl;
     //imprimir canciones del artista
 
+    std::string artista = artistasTop[numero - 1];
+    cout << "Artista: " << artista << endl;
+    Node* aux = lista.getStart();
+    int i = 1;
+    while(aux != nullptr){
+        if(aux->getValue()->getArtista() == artista){
+            cout << i << ". " << aux->getValue()->getNombre() << endl;
+            i++;
+        }
+        aux = aux->getNext();
+    }
+    
     cout << "Opciones:" << endl;
-    cout << "R<num> - Reproducir canción seleccionada " << endl;
-    cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual " << endl;
-    cout << "V - Volver al listado de TOP 10 artistas " << endl;
-    cout << "X - Volver al menú principal " << endl;
-    cout << "\nIngrese Opción:  " << endl;
+    cout << "R<num> - Reproducir cancion seleccionada" << endl;
+    cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproducción actual" << endl;
+    cout << "V - Volver al listado de TOP 10 artistas" << endl;
+    cout << "X - Volver al menu principal" << endl;
+    cout << "\nIngrese Opción: ";
 
-    cin.ignore();
     string opcion;
     cin >> opcion;
 
     if(opcion.size() > 1){
         if(opcion[0] == 'R' || opcion[0] == 'r'){
+            int num = stoi(opcion.substr(1));
+            Node* aux = lista.getStart();
+            int contador =1;
+            if(num <= 0){
+                cout << "Opcion invalida" << endl;
+                return;
+            }
+            while (aux != nullptr){
+                if(aux->getValue()->getArtista() == artista){
+                    if(contador == num){
+                        break;
+                    }
+                    contador++;
+                }
+                aux = aux->getNext();
+            }
+            if(aux == nullptr){
+                //si no encuentra la cancion
+                cout << "Cancion no encontrada" << endl;
+                return;
+            } 
+            listaAux.clear();
+            listaAux.insertLast(aux->getValue());
 
+            actual = listaAux.getStart();
+            int cancionesAgregadas = 1;
+            while(cancionesAgregadas < totalCanciones){
+                int random = rand() % totalCanciones + 1;
+                Node* aux = lista.getStart();
+                while(aux != nullptr){
+                    if(aux->getValue()->getId() == random){
+                        bool exist = false;
+                        Node* check = listaAux.getStart();
+                        while(check != nullptr){
+                            if(check->getValue() == aux->getValue()){
+                                exist = true;
+                                break;
+                            }
+                            check = check->getNext();
+                        }
+                        if(!exist){
+                            listaAux.insertLast(aux->getValue());
+                            cancionesAgregadas++;
+                        }
+                        break;
+                    }
+                    aux = aux->getNext();
+                }
+            }
+            aux->getValue()->setReproducciones(aux->getValue()->getReproducciones() + 1);
+            r.setCancionActual(actual->getValue()->getNombre());
+            r.setArtista(actual->getValue()->getArtista());
+            r.setAlbum(actual->getValue()->getAlbum());
+            r.setAnio(actual->getValue()->getAnio());
         }else if(opcion[0] == 'A' || opcion[0] == 'a'){
+            int num = stoi(opcion.substr(1));
+            Node* aux = lista.getStart();
+            int contador =1;
 
+            if(num <= 0){
+                cout << "Opcion invalida" << endl;
+                return;
+            }
+            while (aux != nullptr){
+                if(aux->getValue()->getArtista() == artista){
+                    if(contador == num){
+                        break;
+                    }
+                    contador++;
+                }
+                aux = aux->getNext();
+            }
+            if(aux == nullptr){
+                //si no encuentra la cancion
+                cout << "Cancion no encontrada" << endl;
+                return;
+            }
+
+            listaAux.insertLast(aux->getValue());
+            cout << "Cancion agregada" << endl;
+            return;
         }
     }else{
         if(opcion == "V" || opcion == "v"){
-
+            subOpcionA();
+            return;
         }else if(opcion == "X" || opcion == "x"){
-
+            return;
         }
     }
-
-
- 
-
 }
