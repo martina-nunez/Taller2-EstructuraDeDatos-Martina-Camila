@@ -6,10 +6,10 @@ NodeTrie::NodeTrie() {
         children[i] = nullptr;
     }
 }
-NodeTrie* NodeTrie::getChild(int i) {
+NodeTrie* NodeTrie::getChildren(int i) {
     return children[i];
 }
-void NodeTrie::setChild(int i, NodeTrie* n) {
+void NodeTrie::setChildren(int i, NodeTrie* n) {
     children[i] = n;
 }
 CancionTrie* NodeTrie::getCancionTrie() {

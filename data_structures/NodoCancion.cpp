@@ -1,6 +1,6 @@
 
 #include "NodoCancion.hpp"
-NodoCancion::NodoCancion(Nodo* nodo) {
+NodoCancion::NodoCancion(Node* nodo) {
     this->nodo = nodo;
     siguiente = nullptr;
 }
@@ -11,7 +11,7 @@ Node *NodoCancion::getNodo() {
 void NodoCancion::setNodo(Node* nodo) {
     this->nodo = nodo;
 }
-void NodoCancion::setSiguiente(Node* siguiente) {
+void NodoCancion::setSiguiente(NodoCancion* siguiente) {
     this->siguiente = siguiente;
 }
 NodoCancion* NodoCancion::getSiguiente() {

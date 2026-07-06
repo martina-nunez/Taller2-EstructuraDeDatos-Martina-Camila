@@ -39,7 +39,7 @@ void Trie::agregar(Node* nodo) {
 
 }
 CancionTrie* Trie::buscar(string p) {
-    Trie* actual = root;
+    NodeTrie* actual = root;
     for (char l : p) {
         int ind = tenerI(l);
         if (ind == -1) {

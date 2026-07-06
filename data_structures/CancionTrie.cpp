@@ -26,7 +26,7 @@ void CancionTrie::agregar(Node *nodo) {
         if (aux->getNodo() == nodo) {
             return;
         }
-        aux = aux->getsiguiente();
+        aux = aux->getSiguiente();
     }
     NodoCancion* aux2 = new NodoCancion(nodo);
     if (h == nullptr) {
@@ -42,7 +42,7 @@ void CancionTrie::agregar(Node *nodo) {
 void CancionTrie::limpiar() {
     NodoCancion* aux = h;
     while (aux != nullptr) {
-        nodoCancion* aux2 = aux->getsiguiente();
+        NodoCancion* aux2 = aux->getSiguiente();
         delete aux;
         aux = aux2;
     }
