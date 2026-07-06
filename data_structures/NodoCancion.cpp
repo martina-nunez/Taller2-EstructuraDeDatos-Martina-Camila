@@ -1,6 +1,3 @@
-//
-// Created by camil on 7/5/2026.
-//
 
 #include "NodoCancion.hpp"
 NodoCancion::NodoCancion(Nodo* nodo) {
