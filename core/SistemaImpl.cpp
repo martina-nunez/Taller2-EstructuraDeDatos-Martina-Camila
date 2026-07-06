@@ -631,23 +631,72 @@ void SistemaImpl::opcionF(){
     if(buscar == ""){
         return;
     }
-
+    CancionTrie* lis = trie.buscar(buscar);
+    if(lis == nullptr || lis->esVacia()) {
+        cout << "no hay canciones" << endl;
+        return;
+    }
     while (true) {
         limpiarConsola();
         cout <<"Canciones que contienen \""<<buscar<<"\"" << endl;
-        NodoCancion* nodo = ;
+        NodoCancion* nodo = lis->geth();
+        int i =1;
+        while (nodo != nullptr) {
+            cout <<i<<" "<< nodo->getNodo()->getValue()->getNombre() << endl;
+            cout << nodo->getNodo()->getValue()->getArtista() << endl;
+            nodo = nodo->getSiguiente();
+            i++;
+
+        }
+        cout << "\nOpciones:" << endl;
+        cout << "R<num> - Reproducir canción seleccionada" << endl;
+        cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual" << endl;
+        cout << "F - Repetir búsqueda con un texto diferente" << endl;
+        cout << "V - Volver al menú principal" << endl;
+        cout << "\nIngrese una opcion: ";
+        string opcion;
+        cin >> opcion;
+        char letra = toupper(opcion[0]);
+
+        if (opcion == "F"){
+            opcionF();
+            return;
+        }
+        if (opcion == "V") {
+            return;
+        }
+        if (opcion.size()<2) {
+            continue;
+        }
+        int n = stoi(opcion[1]);
+        nodo = lis->geth();
+        int cont = 1;
+        while (nodo != nullptr) {
+            if (cont == n) {
+                if (letra == "R") {
+                    actual = nodo->getNodo();
+                    r.setEstado("Reproduciendo");
+                    r.setCancionActual(actual->getValue()->getNombre());
+                    r.setArtista(actual->getValue()->getArtista());
+                    r.setAlbum(actual->getValue()->getAlbum());
+                    r.setAnio(actual->getValue()->getAnio());
+                    int c  =actual->getValue()->getReproducciones();
+                    actual->getValue()->setReproducciones(c+1);
+                    listaAux.clear();
+                    mezclarCanciones(totalCanciones);
+                }else if (letra == "A") {
+                    listaAux.insertLast(nodo->getNodo()->getValue());
+                }
+                break;
+            }
+            cont++;
+            nodo = nodo->getSiguiente();
+        }
 
     }
     //funcion de busqueda po rcoincidencias
     //opciones que contengan la palabra
-    cout << "\nOpciones:" << endl; 
-    cout << "R<num> - Reproducir canción seleccionada" << endl;
-    cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual" << endl; 
-    cout << "F - Repetir búsqueda con un texto diferente" << endl;
-    cout << "V - Volver al menú principal" << endl;
-    cout << "\nIngrese una opcion: ";
-    string opcion;
-    cin >> opcion;
+
 
 }
 
