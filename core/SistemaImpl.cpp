@@ -649,10 +649,10 @@ void SistemaImpl::opcionF(){
 
         }
         cout << "\nOpciones:" << endl;
-        cout << "R<num> - Reproducir canción seleccionada" << endl;
-        cout << "A<num> - Agregar canción seleccionada al final de la lista de reproducción actual" << endl;
-        cout << "F - Repetir búsqueda con un texto diferente" << endl;
-        cout << "V - Volver al menú principal" << endl;
+        cout << "R<num> - Reproducir cancion seleccionada" << endl;
+        cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual" << endl;
+        cout << "F - Repetir busqueda con un texto diferente" << endl;
+        cout << "V - Volver al menu principal" << endl;
         cout << "\nIngrese una opcion: ";
         string opcion;
         cin >> opcion;
@@ -668,12 +668,12 @@ void SistemaImpl::opcionF(){
         if (opcion.size()<2) {
             continue;
         }
-        int n = stoi(opcion[1]);
+        int n = stoi(opcion.substr(1));
         nodo = lis->geth();
         int cont = 1;
         while (nodo != nullptr) {
             if (cont == n) {
-                if (letra == "R") {
+                if (letra == 'R') {
                     actual = nodo->getNodo();
                     r.setEstado("Reproduciendo");
                     r.setCancionActual(actual->getValue()->getNombre());
@@ -684,7 +684,7 @@ void SistemaImpl::opcionF(){
                     actual->getValue()->setReproducciones(c+1);
                     listaAux.clear();
                     mezclarCanciones(totalCanciones);
-                }else if (letra == "A") {
+                }else if (letra == 'A') {
                     listaAux.insertLast(nodo->getNodo()->getValue());
                 }
                 break;
@@ -692,12 +692,7 @@ void SistemaImpl::opcionF(){
             cont++;
             nodo = nodo->getSiguiente();
         }
-
     }
-    //funcion de busqueda po rcoincidencias
-    //opciones que contengan la palabra
-
-
 }
 
 void SistemaImpl::opcionT(){

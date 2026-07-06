@@ -1,6 +1,5 @@
-
-
 #include "CancionTrie.hpp"
+
 CancionTrie::CancionTrie() {
     h = nullptr;
     cola = nullptr;
@@ -49,5 +48,4 @@ void CancionTrie::limpiar() {
     h = nullptr;
     cola = nullptr;
     cant = 0;
-
 }

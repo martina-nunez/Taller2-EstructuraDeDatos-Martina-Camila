@@ -1,7 +1,6 @@
-
-
 #include "Trie.hpp"
 using namespace std;
+
 Trie::Trie() {
     root = new NodeTrie();
 }
@@ -12,7 +11,6 @@ int Trie::tenerI(char letra) {
         return letra - 'a';
     }
     return -1;
-
 }
 
 void Trie::agregarP(string letra, Node* node) {
@@ -30,6 +28,7 @@ void Trie::agregarP(string letra, Node* node) {
     }
     actual->setFin(true);
 }
+
 void Trie::agregar(Node* nodo) {
     string nombre = nodo->getValue()->getNombre();
     string artista = nodo->getValue()->getArtista();
@@ -38,6 +37,7 @@ void Trie::agregar(Node* nodo) {
     }
 
 }
+
 CancionTrie* Trie::buscar(string p) {
     NodeTrie* actual = root;
     for (char l : p) {
